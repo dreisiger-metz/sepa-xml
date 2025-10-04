@@ -9,6 +9,7 @@ import xmltodict
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
+    parser.add_argument("--xpath", type=str, required=False, help=f"the XPath spec to be used")
     parser.add_argument("-v", "--verbosity", action="count", help="increase output verbosity", default=0)
     parser.add_argument("input-file.xml", help="the XML file to be processed", type=str)
     parser.add_argument("monthly-summaries.csv", help="the CSV file to which monthly summaries will be appended", type=str)
@@ -20,6 +21,7 @@ if __name__ == "__main__":
         xmldoc = xmlfile.read()
 
     if args.verbosity > 0: print(f"  - Read {vars(args)['input-file.xml']}")
+
 
 
     xmldict = xmltodict.parse(xmldoc)['Document']
@@ -74,4 +76,3 @@ if __name__ == "__main__":
         writer = csv.DictWriter(csvfile, fieldnames=list(summary.keys()))
         if not summaryFileExists: writer.writeheader()
         writer.writerow(summary)
-
