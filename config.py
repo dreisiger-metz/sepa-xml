@@ -1,9 +1,9 @@
 import datetime
 
-# Example `Config` definition --- customise to suit
+# Example `Config` definition:
 Config = {
-    "SEPAProfile": {
-        "first": {
+    "first": {
+        "SEPAProfile": {
             "msg_id": f"MSGID-PREFIX--{datetime.datetime.today().strftime('%Y%m%d-%H%M%S')}",
             "name": "Organisation Name",
             "IBAN": "DE09500103000092761290",
@@ -12,7 +12,12 @@ Config = {
             "creditor_id": "DE6000000000000000",
             "currency": "EUR"
         },
-        "second": {
+        "Payment": { 
+            "DefaultDescription": "Zahlung fuer {args.for_period} - Herzlichen Dank"
+        }
+    },
+    "second": {
+        "SEPAProfile": {
             "msg_id": f"MSGID-SECOND-PREFIX--{datetime.datetime.today().strftime('%Y%m%d-%H%M%S')}",
             "name": "Organisation Name",
             "IBAN": "DE09500103000092761290",
@@ -20,9 +25,9 @@ Config = {
             "batch": True,
             "creditor_id": "DE6000000000000000",
             "currency": "EUR"
+        },
+        "Payment": { 
+            "DefaultDescription": "Andere Zahlung fuer {args.for_period} - Herzlichen Dank"
         }
-    },
-    "Payment": { 
-        "Description": "Zahlung für {args.for_period} - Herzlichen Dank"
     }
 }
