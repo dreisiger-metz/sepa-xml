@@ -38,6 +38,7 @@ if __name__ == "__main__":
     sepa = SepaDebit(Config[args.profile]['SEPAProfile'], schema="pain.008.001.02", clean=True)
 
 
+    print(f"- About to read data from {vars(args)['input-file.csv']}")
     with open(vars(args)['input-file.csv']) as csvfile:
         reader = csv.DictReader(csvfile, delimiter=',')
         for row in reader:
@@ -53,6 +54,8 @@ if __name__ == "__main__":
                 reasons.append(f"for-date {dateFor.strftime('%Y-%m')} is before not-before-date {row['Nicht vor']}")
             if dateNotAfter != None and dateFor > dateNotAfter:
                 reasons.append(f"for-date {dateFor.strftime('%Y-%m')} falls after not-after-date {row['Nicht nach']}")
+            if row["SWIFT/BIC"].strip() == "":
+                reasons.append("missing SWIFT/BIC")
             if len(reasons) == 0:
                 try:
                     if args.verbosity > 0: print(f"  - about to process '{row}'")
@@ -74,5 +77,6 @@ if __name__ == "__main__":
                 print(f"  - skipping entry for '{row['Name des Zahlungspflichtigen']}' due to reason{'s' if len(reasons)>1 else ''}: {', '.join(reasons)}")
 
 
+    print(f"- About to write data to {vars(args)['output-file.xml']}")
     with open(vars(args)['output-file.xml'], 'w') as xmlfile:
         xmlfile.write(sepa.export(validate=True).decode('utf-8'))
